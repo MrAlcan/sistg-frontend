@@ -6,8 +6,76 @@ import StatCard from '@/presentation/web/components/shared/cards/StatCard.astro'
 import Hero from '@/presentation/web/components/shared/main/Hero.astro'
 import RepositoryCard from '@/presentation/web/components/shared/cards/RepositoryCard.astro'
 import FooterPublic from '@/presentation/web/components/shared/footers/FooterPublic.astro'
+import SeatButton from '@/presentation/web/components/shared/buttons/SeatButton.svelte'
+import ContainerMap from '@/presentation/web/components/shared/main/ContainerMap.astro'
+import ContainerMapInteractive from '@/presentation/web/components/shared/main/ContainerMapInteractive.svelte'
+import SeatEspecifiedButton from '@/presentation/web/components/shared/main/SeatEspecifiedButton.svelte'
 
 export const prerender = true
+
+interface InfoCardsProps {
+  id: string
+  title: string
+  directions: string[]
+  phones: string[]
+  cellphones: string[]
+  email: string
+  website: string
+  hours: string
+}
+
+const infoCards: InfoCardsProps[] = [
+  {
+    id: 'seat-La Paz',
+    title: 'LA PAZ',
+    directions: ['Av. Rafael Pabón, zona de Irpavi', 'C. Las Retamas, zona Alto Irpavi', 'Av. Arce No. 2642'],
+    phones: ['+591 2775536', '+591 2799505'],
+    cellphones: ['+591 71223204'],
+    email: 'lapaz@adm.emi.edu.bo',
+    website: 'emi.edu.bo',
+    hours: 'Lun-Vie 08:00 - 16:00'
+  },
+  {
+    id: 'seat-Cochabamba',
+    title: 'COCHABAMBA',
+    directions: ['Av. Lanza entre Oruro y La Paz', 'Av. 23 de Marzo, Zona Muyurina'],
+    phones: ['+591 4531133', '+591 4530361'],
+    cellphones: ['+591 71522834', '+591 71223204'],
+    email: 'cochabamba@adm.emi.edu.bo',
+    website: 'emi.edu.bo/cbba',
+    hours: 'Lun-Vie 08:00 - 16:00'
+  },
+  {
+    id: 'seat-Santa Cruz',
+    title: 'SANTA CRUZ',
+    directions: ['Tercer Anillo Radial 13'],
+    phones: ['+591 3527431', '+591 3579545'],
+    cellphones: ['+591 71566652'],
+    email: 'santacruz@adm.emi.edu.bo',
+    website: 'emi.edu.bo',
+    hours: 'Lun-Vie 08:00 - 16:00'
+  },
+  {
+    id: 'seat-Riberalta',
+    title: 'RIBERALTA',
+    directions: ['Nicanor Salvatierra N° 154 - Barrio La Cruz'],
+    phones: ['+591 8524373'],
+    cellphones: ['+591 71564887'],
+    email: 'riberalta@adm.emi.edu.bo',
+    website: 'emi.edu.bo',
+    hours: 'Lun-Vie 08:00 - 16:00'
+  },
+  {
+    id: 'seat-Tropico',
+    title: 'TROPICO',
+    directions: ['Calle Germán Bush / OTB Paraíso Distrito N° 9 - Shinahota'],
+    phones: [],
+    cellphones: ['+591 71291823', '+591 71291829'],
+    email: 'tropico@adm.emi.edu.bo',
+    website: 'emi.edu.bo',
+    hours: 'Lun-Vie 08:00 - 16:00'
+  },
+]
 ---
 
 <LayoutPublic>
@@ -136,67 +204,43 @@ export const prerender = true
 
     <!-- SEDES CON MAPA -->
     <section class="py-24 px-4">
-        <div class="max-w-7xl mx-auto">
+        <div class="w-full">
             <h2 class="text-5xl md:text-6xl font-black text-navy-900 mb-4 text-center">UBICACIONES</h2>
             <div class="w-24 h-1 gold-accent mx-auto rounded-full mb-16"></div>
-
-            <!-- MAPA INTERACTIVO -->
-            <div class="bg-white rounded-xl p-8 shadow-lg border-2 border-gold-400 mb-12">
-                <div class="grid-bg relative rounded-lg overflow-hidden" style="height: 500px;">
-                    <svg class="w-full h-full" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
-                        <defs>
-                            <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#dbeafe;stop-opacity:1"/>
-                                <stop offset="100%" style="stop-color:#bfdbfe;stop-opacity:1"/>
-                            </linearGradient>
-                        </defs>
-                        <rect width="1000" height="600" fill="url(#mapBg)"/>
-                        <path d="M 250 150 L 450 180 L 520 280 L 480 420 L 300 450 L 150 330 L 200 200 Z" fill="#e3f2fd" stroke="#1d4ed8" stroke-width="2" opacity="0.8"/>
-                        
-                        <!-- PINS CON EFECTO -->
-                        <g onclick="selectSeat('La Paz')">
-                            <circle cx="280" cy="240" r="8" fill="#facc15"/>
-                            <circle cx="280" cy="240" r="14" fill="none" stroke="#facc15" stroke-width="2" opacity="0.5" class="animate-pulse"/>
-                        </g>
-                        <g onclick="selectSeat('Cochabamba')">
-                            <circle cx="360" cy="360" r="8" fill="#1d4ed8"/>
-                            <circle cx="360" cy="360" r="14" fill="none" stroke="#1d4ed8" stroke-width="2" opacity="0.5"/>
-                        </g>
-                        <g onclick="selectSeat('Santa Cruz')">
-                            <circle cx="450" cy="370" r="8" fill="#1d4ed8"/>
-                            <circle cx="450" cy="370" r="14" fill="none" stroke="#1d4ed8" stroke-width="2" opacity="0.5"/>
-                        </g>
-                    </svg>
-                </div>
+            <!-- SEAT BUTTONS -->
+            <div class="flex gap-4 justify-center my-8 flex-wrap">
+                {infoCards.map((infoCard) => (
+                <SeatButton text={infoCard.title} seat={infoCard.id.split('-')[1]} client:load/>
+                ))}
+            </div>
+            <SeatEspecifiedButton client:load/>
+            <div class="flex justify-center w-full mx-auto">
+                <ContainerMap>
+                  <ContainerMapInteractive client:load/>
+                </ContainerMap>
+            
 
                 <!-- INFO CARDS -->
-                <div class="grid md:grid-cols-3 gap-6 mt-12">
+                <div class="mt-12">
+                    {infoCards.map((infoCard) => (
                     <InfoCard
-                      id="seat-La Paz"
-                      title="LA PAZ"
-                      direction="Av. Sánchez Lima 2650"
-                      phone="+591 2 2789012"
-                      email="lapaz@emi.edu.bo"
-                      website="emi.edu.bo"
-                      hours="Lun-Vie 08:00 - 18:00"
+                      id={infoCard.id}
+                      title={infoCard.title}
+                      directions={infoCard.directions}
+                      phones={infoCard.phones}
+                      cellphones={infoCard.cellphones}
+                      email={infoCard.email}
+                      website={infoCard.website}
+                      hours={infoCard.hours}
                     />
-                    <InfoCard
-                      id="seat-Cochabamba" title="COCHABAMBA" direction="Calle Lanza 434" phone="+591 4 4234567" email="cochabamba@emi.edu.bo" website="emi.edu.bo/cbba" hours="Lun-Vie 08:00 - 18:00" />
-                    <InfoCard id="seat-Santa Cruz" title="SANTA CRUZ" direction="Av. Sánchez Lima 2650" phone="+591 2 2789012" email="lapaz@emi.edu.bo" website="emi.edu.bo" hours="Lun-Vie 08:00 - 18:00" />
-                </div>
-
-                <!-- SEAT BUTTONS -->
-                <div class="flex gap-4 justify-center mt-8 flex-wrap">
-                    <button onclick="selectSeat('La Paz')" class="px-8 py-3 bg-gold-400 text-navy-900 rounded-lg font-bold neon-border hover:shadow-lg hover:cursor-pointer transition-all">LA PAZ</button>
-                    <button onclick="selectSeat('Cochabamba')" class="px-8 py-3 bg-navy-800 text-white rounded-lg font-bold neon-border hover:shadow-lg hover:cursor-pointer transition-all">COCHABAMBA</button>
-                    <button onclick="selectSeat('Santa Cruz')" class="px-8 py-3 bg-navy-800 text-white rounded-lg font-bold neon-border hover:shadow-lg hover:cursor-pointer transition-all">SANTA CRUZ</button>
+                    ))}
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CONTACTO -->
-    <section class="bg-linear-to-r from-navy-900 to-navy-800 text-white py-16 px-4">
+    <!--section class="bg-linear-to-r from-navy-900 to-navy-800 text-white py-16 px-4">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-4xl font-black mb-12 text-center">SOPORTE</h2>
             <div class="grid md:grid-cols-4 gap-6">
@@ -222,19 +266,16 @@ export const prerender = true
                 </div>
             </div>
         </div>
-    </section>
+    </section-->
 
     <!-- FOOTER -->
     <FooterPublic />
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectSeat = (seat: string) => {
-                console.log(seat);
-                document.querySelectorAll('[id^="seat-"]').forEach(el => el.classList.add('hidden'));
-                document.getElementById(`seat-${seat}`)?.classList.remove('hidden');
-            }
-            selectSeat('La Paz');
+        import { mainSeat } from '@/presentation/web/stores/main-seat.store'
+        mainSeat.subscribe(value => {
+          document.querySelectorAll('[id^="seat-"]').forEach(el => el.classList.add('hidden'));
+          document.getElementById(`seat-${value}`)?.classList.remove('hidden');
         })
     </script>
 </LayoutPublic>

@@ -1,16 +1,19 @@
 ---
 
+import RedirectAnchorTag from '@/presentation/web/components/shared/anchor-tags/RedirectAnchorTag.astro'
+
 interface Props {
   id: string
   title: string
-  direction: string
-  phone: string
+  directions: string[]
+  phones: string[]
+  cellphones: string[]
   email: string
   website: string
   hours: string
 }
 
-const { id, title, direction, phone, email, website, hours } = Astro.props
+const { id, title, directions, phones, cellphones, email, website, hours }: Props = Astro.props
 ---
 <style>
   * {
@@ -33,16 +36,27 @@ const { id, title, direction, phone, email, website, hours } = Astro.props
   </h4>
   <div class="space-y-3 text-sm font-semibold text-slate-700">
     <p>
-      📍 { direction }
+      📍 { directions.join(' | ') }
     </p>
     <p>
-      📞 { phone }
+      📞 { phones.join(' | ') }
     </p>
     <p>
-      📧 { email }
+      📱 {
+        cellphones.map( cellphone => (
+          <span><RedirectAnchorTag href={`https://wa.me/${ cellphone.replace(' ', '').replace('+', '') }`}>{ cellphone }</RedirectAnchorTag> | </span>
+        ))
+      }
     </p>
     <p>
-      🌐 { website }
+      <RedirectAnchorTag href={`mailto:${ email }`}>
+        📧 { email }
+      </RedirectAnchorTag>
+    </p>
+    <p>
+      <RedirectAnchorTag href={`https://www.${ website }`}>
+        🌐 { website }
+      </RedirectAnchorTag>
     </p>
     <p>
       🕐 { hours }
